@@ -8,7 +8,6 @@ from reportlab.lib import colors
 from reportlab.lib.units import inch
 from datetime import datetime
 import os
-import tempfile
 
 # === CONFIGURATION ===
 GROQ_API_KEY = "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"
@@ -133,23 +132,11 @@ def query_groq(prompt):
         return f"Error: {str(e)}"
 
 # === GENERATE PDF REPORT ===
-
-
 def generate_business_report(data, ai_analysis):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
-    # Save PDF in a temporary file
-    temp_dir = tempfile.gettempdir()
     filename = f"Business_Report_{timestamp}.pdf"
-    filepath = os.path.join(temp_dir, filename)
     
-    doc = SimpleDocTemplate(filepath, pagesize=A4, rightMargin=50, leftMargin=50, topMargin=50, bottomMargin=50)
-
-#def generate_business_report(data, ai_analysis):
-#    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-#    filename = f"Business_Report_{timestamp}.pdf"
-    
-#    doc = SimpleDocTemplate(filename, pagesize=A4, rightMargin=50, leftMargin=50, topMargin=50, bottomMargin=50)
+    doc = SimpleDocTemplate(filename, pagesize=A4, rightMargin=50, leftMargin=50, topMargin=50, bottomMargin=50)
     styles = getSampleStyleSheet()
     
     # Custom styles
@@ -415,15 +402,19 @@ def main():
             # Create prompt for AI
             prompt = f"""
 Generate a comprehensive Business Idea Generation & Validation Report for the following business:
+
 Business Details:
 - Owner: {data['full_name']}
 - Industry: {data['industry']}
 - Location: {data['state']}
 - Business Name: {data.get('business_name', 'Not specified')}
+
 Business Goals:
 {data['business_goals']}
+
 Additional Information:
 {data.get('additional_info', 'None provided')}
+
 Please provide a detailed report with the following sections:
 1. Executive Summary
 2. Market Analysis for {data['industry']} in {data['state']}
@@ -434,6 +425,7 @@ Please provide a detailed report with the following sections:
 7. Key Success Factors
 8. Potential Challenges & Risks
 9. Recommendations & Next Steps
+
 Use clear headings (##), subheadings (###), bullet points, and professional language.
 """
             
@@ -460,24 +452,15 @@ Use clear headings (##), subheadings (###), bullet points, and professional lang
                 """, unsafe_allow_html=True)
                 
                 # Download button
-                #with open(filename, "rb") as file:
-                #    st.download_button(
-                #        label="📥 Download Business Report",
-                #        data=file,
-                #        file_name=filename,
-                #        mime="application/pdf",
-                #        use_container_width=True
-                #    )
-
                 with open(filename, "rb") as file:
                     st.download_button(
                         label="📥 Download Business Report",
-                        data=file.read(),
-                        file_name=os.path.basename(filename),  # ensure only filename is used
+                        data=file,
+                        file_name=filename,
                         mime="application/pdf",
                         use_container_width=True
-                     )
-
+                    )
+                
                 # Show AI Analysis preview
                 with st.expander("👀 Preview AI Analysis", expanded=True):
                     st.markdown(ai_analysis)
