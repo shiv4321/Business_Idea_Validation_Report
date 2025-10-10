@@ -350,6 +350,7 @@ def main():
         
         # 5. File Uploads
         st.markdown("### 📁 5. File Uploads (Optional)")
+        st.info("💡 Upload images/documents. They will be included in your PDF report.")
         uploaded_files = st.file_uploader(
             "Upload Documents (Proof of concept, product mockups, prototypes, etc.)",
             accept_multiple_files=True,
