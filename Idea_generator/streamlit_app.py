@@ -10,7 +10,7 @@ from datetime import datetime
 import os
 
 # === CONFIGURATION ===
-GROQ_API_KEY = "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"
+GROQ_API_KEY = "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"
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
 # === PAGE CONFIG ===
@@ -475,3 +475,4 @@ Use clear headings (##), subheadings (###), bullet points, and professional lang
 
 if __name__ == "__main__":
     main()
+
